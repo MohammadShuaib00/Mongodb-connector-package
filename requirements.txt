@@ -1,0 +1,11 @@
+# Main requirements
+pymongo  # MongoDB driver for Python
+pymongo[srv]  # Includes DNS support for MongoDB connection strings
+dnspython  # Library for DNS resolution in Python
+pandas  # Data manipulation and analysis library
+numpy  # Fundamental package for numerical computations in Python
+ensure  # Provides runtime assertions (or ensurepip if meant for pip)
+pytest  # Framework for writing and running tests
+
+# Editable mode
+-e .  # Install the current package in editable mode
