@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 import pandas as pd
 import pymongo
 import json
@@ -6,7 +6,7 @@ from pymongo.mongo_client import MongoClient
 
 
 class mongo_operation:
-    def __init__(self, client_url: str, database_name: str, collection_name: str = None):
+    def __init__(self, client_url: str, database_name: str, collection_name: Optional[str] = None):
         self.client_url = client_url
         self.database_name = database_name
         self.collection_name = collection_name
@@ -25,7 +25,7 @@ class mongo_operation:
             raise ValueError("Collection name must be specified")
         return self.database[self.collection_name]
 
-    def insert_record(self, record: dict, collection_name: str = None) -> Any:
+    def insert_record(self, record: dict, collection_name: Optional[str] = None) -> Any:
         if collection_name:
             self.collection_name = collection_name
             self.collection = self.create_collection()
