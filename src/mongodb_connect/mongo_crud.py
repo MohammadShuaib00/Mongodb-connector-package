@@ -4,6 +4,7 @@ import pymongo
 import json
 from pymongo.mongo_client import MongoClient
 
+
 class mongo_operation:
     def __init__(self, client_url: str, database_name: str, collection_name: str = None):
         self.client_url = client_url
@@ -28,7 +29,6 @@ class mongo_operation:
         if collection_name:
             self.collection_name = collection_name
             self.collection = self.create_collection()
-        
         if isinstance(record, list):
             if not all(isinstance(data, dict) for data in record):
                 raise TypeError("Record must be in dict format")
