@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 with open('README.md', 'r', encoding='utf-8') as f:
     long_description = f.read()
 
-__version__ = "0.0.1"
+__version__ = "0.0.3"
 REPO_NAME = "mongodb-connector-package"
 PKG_NAME = "dbautomationtool"
 AUTHOR_USER_NAME = "Mohammad Shuaib"
