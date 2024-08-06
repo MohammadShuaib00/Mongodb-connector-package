@@ -6,5 +6,6 @@ pandas  # Data manipulation and analysis library
 numpy  # Fundamental package for numerical computations in Python
 ensure  # Provides a way to ensure that code contracts are followed (if you meant `ensurepip`, it’s for ensuring pip is installed)
 flake8
+pytest
 # Editable mode
 -e .  # Install the current package in editable mode
