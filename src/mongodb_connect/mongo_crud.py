@@ -1,71 +1,50 @@
 from typing import Any
-import os
 import pandas as pd
 import pymongo
 import json
-from ensure import ensure_annotations
-
-
-from typing import Any
-import os
-import pandas as pd
 from pymongo.mongo_client import MongoClient
-import json
-from ensure import ensure_annotations
-
 
 class mongo_operation:
-    __collection=None 
-    __database=None
-    
-    def __init__(self,client_url: str, database_name: str, collection_name: str=None):
-        self.client_url=client_url
-        self.database_name=database_name
-        self.collection_name=collection_name
-       
-    def create_mongo_client(self,collection=None):
-        client=MongoClient(self.client_url)
-        return client
-    
-    def create_database(self,collection=None):
-        if mongo_operation.__database==None:
-            client=self.create_mongo_client(collection)
-            self.database=client[self.database_name]
-        return self.database 
-    
-    def create_collection(self,collection=None):
-        if mongo_operation.__collection==None:
-            database=self.create_database(collection)
-            self.collection=database[self.collection_name]
-            mongo_operation.__collection=collection
+    def __init__(self, client_url: str, database_name: str, collection_name: str = None):
+        self.client_url = client_url
+        self.database_name = database_name
+        self.collection_name = collection_name
+        self.client = self.create_mongo_client()
+        self.database = self.create_database()
+        self.collection = self.create_collection()
+
+    def create_mongo_client(self) -> MongoClient:
+        return MongoClient(self.client_url)
+
+    def create_database(self) -> pymongo.database.Database:
+        return self.client[self.database_name]
+
+    def create_collection(self) -> pymongo.collection.Collection:
+        if self.collection_name is None:
+            raise ValueError("Collection name must be specified")
+        return self.database[self.collection_name]
+
+    def insert_record(self, record: dict, collection_name: str = None) -> Any:
+        if collection_name:
+            self.collection_name = collection_name
+            self.collection = self.create_collection()
         
-        if mongo_operation.__collection!=collection:
-            database=self.create_database(collection)
-            self.collection=database[self.collection_name]
-            mongo_operation.__collection=collection
-            
-        return self.collection
-    
-    def insert_record(self,record: dict, collection_name: str) -> Any:
-        if type(record) == list:
-            for data in record:
-                if type(data) != dict:
-                    raise TypeError("record must be in the dict")    
-            collection=self.create_collection(collection_name)
-            collection.insert_many(record)
-        elif type(record)==dict:
-            collection=self.create_collection(collection_name)
-            collection.insert_one(record)
-    
-    def bulk_insert(self,datafile,collection_name:str=None):
-        self.path=datafile
-        
-        if self.path.endswith('.csv'):
-            pd.read.csv(self.path,encoding='utf-8')
-            
-        elif self.path.endswith(".xlsx"):
-            dataframe=pd.read_excel(self.path,encoding='utf-8')
-            
-        datajson=json.loads(dataframe.to_json(orient='record'))
-        collection=self.create_collection()
-        collection.insert_many(datajson)
+        if isinstance(record, list):
+            if not all(isinstance(data, dict) for data in record):
+                raise TypeError("Record must be in dict format")
+            self.collection.insert_many(record)
+        elif isinstance(record, dict):
+            self.collection.insert_one(record)
+        else:
+            raise TypeError("Record must be either a dict or a list of dicts")
+
+    def bulk_insert(self, datafile: str) -> None:
+        if datafile.endswith('.csv'):
+            dataframe = pd.read_csv(datafile, encoding='utf-8')
+        elif datafile.endswith('.xlsx'):
+            dataframe = pd.read_excel(datafile, encoding='utf-8')
+        else:
+            raise ValueError("File format not supported")
+
+        datajson = json.loads(dataframe.to_json(orient='records'))
+        self.collection.insert_many(datajson)

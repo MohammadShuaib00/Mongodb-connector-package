@@ -4,8 +4,7 @@ pymongo[srv]  # Includes DNS support for MongoDB connection strings
 dnspython  # Library for DNS resolution in Python
 pandas  # Data manipulation and analysis library
 numpy  # Fundamental package for numerical computations in Python
-ensure  # Provides runtime assertions (or ensurepip if meant for pip)
-pytest  # Framework for writing and running tests
+ensure  # Provides a way to ensure that code contracts are followed (if you meant `ensurepip`, it’s for ensuring pip is installed)
 
 # Editable mode
 -e .  # Install the current package in editable mode

@@ -10,7 +10,7 @@ ensure  # Provides a way to ensure that code contracts are followed (if you mean
 pytest==7.1.3  # Framework for writing and running tests
 tox==4.16.0  # Testing tool that automates testing across multiple environments
 black==24.8.0  # Code formatter that enforces a consistent code style
-flake8==1.6.0  # Tool for checking the style guide enforcement in Python code
+flake8==6.0.0  # Tool for checking the style guide enforcement in Python code
 mypy==1.11.1  # Static type checker for Python
 
 # Editable mode
